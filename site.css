@@ -3,11 +3,28 @@ body {
 }
 
 .home-bg {
+  background-color: #ffffff;
+}
+
+.page-bg {
+  position: fixed;
+  z-index: 0;
+  top: 56px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 56px);
   background-image: url("bg.gif");
   background-repeat: no-repeat;
-  background-position: center top 56px;
-  background-size: 100% calc(100vh - 56px);
-  background-attachment: fixed;
+  background-position: center;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.home-bg .navbar,
+.home-bg .container,
+.home-bg .site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 .hero {
