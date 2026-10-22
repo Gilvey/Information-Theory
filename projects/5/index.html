@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project 5 — WOW/BOW — IT by Gilvey Nikolay</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../site.css">
+  <style>
+    h1 { font-size: 3.5rem; }
+  </style>
+</head>
+<body data-meow="../../meow.mp3">
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../../index.html">IT by Gilvey Nikolay</a>
+    <a class="btn btn-outline-light" href="../../index.html">Home</a>
+  </div>
+</nav>
+
+<main class="container project-page text-center">
+  <h1>Project 5</h1>
+  <p class="project-note">WOW/BOW Generator</p>
+
+  <div class="card shadow-sm work-card">
+    <div class="card-body">
+      <div class="row justify-content-center mb-4">
+        <div class="col-sm-5 mb-3">
+          <img class="preview-image" src="../../assets/WOW.webp" alt="WOW">
+        </div>
+        <div class="col-sm-5 mb-3">
+          <img class="preview-image" src="../../assets/BOW.png" alt="BOW">
+        </div>
+      </div>
+      <p class="mb-2">
+        <strong>W</strong> 50%
+        <strong class="ml-3">O</strong> 37.5%
+        <strong class="ml-3">B</strong> 12.5%
+      </p>
+      <p id="shares" class="project-note">So far: W 0% · O 0% · B 0%</p>
+      <div class="mb-4">
+        <button id="generate" type="button" class="btn btn-primary mr-2">Generate</button>
+        <button id="clear" type="button" class="btn btn-danger">Delete</button>
+      </div>
+      <p id="word" class="word"></p>
+    </div>
+  </div>
+
+  <a class="btn btn-outline-dark mt-4" href="../../index.html">Back to Home</a>
+</main>
+
+<footer class="site-footer bg-dark text-white text-center">
+  <small>© 2026 IT by Gilvey Nikolay</small>
+</footer>
+
+<script src="../../click.js"></script>
+<script>
+  let word = "";
+
+  function nextLetter() {
+    const roll = Math.random() * 100;
+    if (roll < 50) return "W";
+    if (roll < 87.5) return "O";
+    return "B";
+  }
+
+  function render() {
+    document.getElementById("word").textContent = word;
+    const counts = { W: 0, O: 0, B: 0 };
+    for (let i = 0; i < word.length; i++) counts[word[i]] += 1;
+    const total = word.length || 1;
+    function share(letter) {
+      return Math.round((counts[letter] / (word.length ? total : 1)) * 1000) / 10;
+    }
+    const empty = word.length === 0;
+    document.getElementById("shares").textContent = empty
+      ? "So far: W 0% · O 0% · B 0%"
+      : "So far: W " + share("W") + "% · O " + share("O") + "% · B " + share("B") + "%";
+  }
+
+  document.getElementById("generate").addEventListener("click", function () {
+    word += nextLetter();
+    render();
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    word = "";
+    render();
+  });
+</script>
+</body>
+</html>

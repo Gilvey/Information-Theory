@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project 1 — ABBA — IT by Gilvey Nikolay</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../site.css">
+</head>
+<body data-meow="../../meow.mp3">
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../../index.html">IT by Gilvey Nikolay</a>
+    <a class="btn btn-outline-light" href="../../index.html">Home</a>
+  </div>
+</nav>
+
+<main class="container project-page text-center">
+  <h1>Project 1</h1>
+  <p class="project-note">ABBA Calculation</p>
+
+  <div class="card shadow-sm work-card">
+    <div class="card-body">
+      <p class="formula mb-4">vowels! × consonants!</p>
+      <div class="d-flex justify-content-center align-items-center flex-wrap">
+        <input id="vowels" class="form-control text-center mx-1" style="width: 96px;" inputmode="numeric" placeholder="Vowels" aria-label="Vowels">
+        <span class="mx-1">!</span>
+        <span class="mx-1">×</span>
+        <input id="consonants" class="form-control text-center mx-1" style="width: 120px;" inputmode="numeric" placeholder="Consonants" aria-label="Consonants">
+        <span class="mx-1">!</span>
+        <button id="calc" type="button" class="btn btn-primary mx-2">=</button>
+      </div>
+      <p id="result" class="result mt-4"></p>
+    </div>
+  </div>
+
+  <a class="btn btn-outline-dark mt-4" href="../../index.html">Back to Home</a>
+</main>
+
+<footer class="site-footer bg-dark text-white text-center">
+  <small>© 2026 IT by Gilvey Nikolay</small>
+</footer>
+
+<script src="../../click.js"></script>
+<script>
+  function factorial(n) {
+    let value = 1n;
+    for (let i = 2n; i <= BigInt(n); i++) value *= i;
+    return value;
+  }
+
+  document.getElementById("calc").addEventListener("click", function () {
+    const vowels = document.getElementById("vowels").value.trim();
+    const consonants = document.getElementById("consonants").value.trim();
+    const out = document.getElementById("result");
+    if (!/^\d+$/.test(vowels) || !/^\d+$/.test(consonants)) {
+      out.textContent = "Enter whole numbers";
+      out.className = "result result-bad";
+      return;
+    }
+    if (Number(vowels) > 500 || Number(consonants) > 500) {
+      out.textContent = "Use numbers up to 500";
+      out.className = "result result-bad";
+      return;
+    }
+    out.textContent = (factorial(vowels) * factorial(consonants)).toString();
+    out.className = "result";
+  });
+</script>
+</body>
+</html>

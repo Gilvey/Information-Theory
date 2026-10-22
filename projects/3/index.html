@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project 3 — Hamming Code — IT by Gilvey Nikolay</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../site.css">
+</head>
+<body data-meow="../../meow.mp3">
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="../../index.html">IT by Gilvey Nikolay</a>
+    <a class="btn btn-outline-light" href="../../index.html">Home</a>
+  </div>
+</nav>
+
+<main class="container project-page text-center">
+  <h1>Project 3</h1>
+  <p class="project-note">Hamming Code</p>
+
+  <div class="card shadow-sm work-card">
+    <div class="card-body">
+      <div class="hamming">
+        <img src="../../assets/HammingCode.jpg" alt="Three overlapping circles">
+        <input id="t5" class="parity" style="top: 14.5%; left: 46.9%;" maxlength="1" inputmode="numeric" aria-label="Top parity">
+        <input id="s1" class="data" style="top: 43.5%; left: 33.5%;" value="1" maxlength="1" inputmode="numeric" aria-label="Data s1">
+        <input id="s2" class="data" style="top: 43.5%; left: 60.3%;" value="1" maxlength="1" inputmode="numeric" aria-label="Data s2">
+        <input id="s3" class="data" style="top: 51.8%; left: 46.9%;" value="1" maxlength="1" inputmode="numeric" aria-label="Data s3">
+        <input id="t6" class="parity" style="top: 70.4%; left: 25.1%;" maxlength="1" inputmode="numeric" aria-label="Left parity">
+        <input id="s4" class="data" style="top: 72.5%; left: 46.9%;" value="1" maxlength="1" inputmode="numeric" aria-label="Data s4">
+        <input id="t7" class="parity" style="top: 72.5%; left: 70.4%;" maxlength="1" inputmode="numeric" aria-label="Right parity">
+      </div>
+      <button id="test" type="button" class="btn btn-primary mr-2">Test</button>
+      <button id="clear" type="button" class="btn btn-secondary">Clear</button>
+      <p id="result" class="result mt-3"></p>
+    </div>
+  </div>
+
+  <a class="btn btn-outline-dark mt-4" href="../../index.html">Back to Home</a>
+</main>
+
+<footer class="site-footer bg-dark text-white text-center">
+  <small>© 2026 IT by Gilvey Nikolay</small>
+</footer>
+
+<script src="../../click.js"></script>
+<script>
+  const groups = {
+    green: ["t5", "s1", "s2", "s3"],
+    blue: ["t6", "s1", "s3", "s4"],
+    pink: ["t7", "s2", "s3", "s4"]
+  };
+  const dataBits = ["s1", "s2", "s3", "s4"];
+  const homes = {
+    s1: ["green", "blue"],
+    s2: ["green", "pink"],
+    s3: ["green", "blue", "pink"],
+    s4: ["blue", "pink"],
+    t5: ["green"],
+    t6: ["blue"],
+    t7: ["pink"]
+  };
+
+  function read(id) {
+    const value = document.getElementById(id).value.trim();
+    return value === "0" || value === "1" ? Number(value) : null;
+  }
+
+  document.getElementById("test").addEventListener("click", function () {
+    const out = document.getElementById("result");
+    const values = {};
+    const ids = Object.keys(homes);
+    for (let i = 0; i < ids.length; i++) {
+      values[ids[i]] = read(ids[i]);
+      if (values[ids[i]] === null) {
+        out.textContent = "Fill every cell with 0 or 1";
+        out.className = "result result-bad";
+        return;
+      }
+    }
+
+    const failed = Object.keys(groups).filter(function (name) {
+      const sum = groups[name].reduce(function (total, id) { return total + values[id]; }, 0);
+      return sum % 2 === 1;
+    });
+
+    dataBits.forEach(function (id) {
+      document.getElementById(id).classList.remove("bit-bad");
+    });
+
+    if (failed.length === 0) {
+      out.textContent = "No error";
+      out.className = "result";
+      return;
+    }
+
+    const hit = Object.keys(homes).find(function (id) {
+      const home = homes[id];
+      return home.length === failed.length && home.every(function (circle) { return failed.indexOf(circle) !== -1; });
+    });
+
+    if (hit && dataBits.indexOf(hit) !== -1) {
+      document.getElementById(hit).classList.add("bit-bad");
+      out.textContent = "Error in " + hit;
+    } else {
+      dataBits.forEach(function (id) { document.getElementById(id).classList.add("bit-bad"); });
+      out.textContent = "Parity bit does not match";
+    }
+    out.className = "result result-bad";
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    ["t5", "t6", "t7"].forEach(function (id) { document.getElementById(id).value = ""; });
+    dataBits.forEach(function (id) {
+      const field = document.getElementById(id);
+      field.value = "1";
+      field.classList.remove("bit-bad");
+    });
+    const out = document.getElementById("result");
+    out.textContent = "";
+    out.className = "result";
+  });
+</script>
+</body>
+</html>
